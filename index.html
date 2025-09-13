@@ -3,155 +3,135 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flash Card Quiz</title>
+<title>Game: Kepelbagaian Iklim di Asia</title>
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #dfe9f3 0%, #ffffff 100%);
+  background: linear-gradient(135deg, #d0f0fd 0%, #ffffff 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
+  justify-content: flex-start;
+  min-height: 100vh;
   margin: 0;
-  padding: 10px;
+  padding: 20px;
 }
-.card {
+h1 { color: #2c3e50; text-align: center; }
+#game-container {
   width: 90%;
-  max-width: 340px;
-  height: 240px;
-  perspective: 1000px;
-  margin-bottom: 60px;
-  position: relative;
-}
-.card-inner {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  text-align: center;
-  transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
-}
-.flipped { transform: rotateY(180deg); }
-.card-front, .card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
+  max-width: 500px;
+  background: #3498db;
+  color: white;
   border-radius: 16px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+#question { font-size: 18px; margin-bottom: 20px; }
+.options button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
   font-size: 16px;
-  line-height: 1.4;
-  transition: background 0.5s ease, color 0.5s ease, transform 0.5s ease, opacity 0.5s ease;
-  word-wrap: break-word;
-}
-.card-front { font-weight: bold; color: #fff; }
-.card-back { color: #fff; transform: rotateY(180deg); }
-.controls {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-button {
-  padding: 12px 20px;
   border: none;
   border-radius: 12px;
-  background: #2ecc71;
+  background: #1abc9c;
   color: white;
-  font-size: 16px;
-  font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-  flex: 1 1 auto;
-  min-width: 80px;
+  transition: background 0.3s;
 }
-button:hover { background: #27ae60; transform: scale(1.05);}
-#muteBtn { position: absolute; top: 10px; right: 10px; background: #e67e22;}
-#playAudioBtn { position: absolute; top: 50px; right: 10px; background: #3498db;}
-@media(max-width:400px){
-  .card-front,.card-back{ font-size:14px;}
-  button{ padding:10px 16px; font-size:14px;}
-}
+.options button:hover { background: #16a085; }
+#feedback { margin-top: 10px; font-weight: bold; }
+#score { margin-top: 15px; font-size: 16px; }
+#nextBtn { margin-top: 20px; padding: 10px 20px; background:#e67e22; border:none; border-radius:10px; color:white; font-weight:bold; cursor:pointer;}
+#nextBtn:hover { background:#d35400; }
 </style>
 </head>
 <body>
 
-<audio id="bgMusic" loop>
-  <source src="https://www.bensound.com/bensound-music/bensound-creativeminds.mp3" type="audio/mpeg">
-  Browser anda tidak menyokong audio.
-</audio>
-<button id="muteBtn" onclick="toggleMute()">🔊</button>
-<button id="playAudioBtn" onclick="playAudio()">▶️ Main Audio</button>
-
-<div class="card" id="card">
-  <div class="card-inner" id="card-inner">
-    <div class="card-front" id="card-front"></div>
-    <div class="card-back" id="card-back"></div>
-  </div>
-</div>
-
-<div class="controls">
-  <button onclick="prevCard()">⬅️ Sebelumnya</button>
-  <button onclick="flipCard()">🔄 Flip</button>
-  <button onclick="nextCard()">➡️ Seterusnya</button>
+<h1>Game: Kepelbagaian Iklim di Asia</h1>
+<div id="game-container">
+  <div id="question"></div>
+  <div class="options" id="options"></div>
+  <div id="feedback"></div>
+  <button id="nextBtn" onclick="nextQuestion()" style="display:none;">Soalan Seterusnya</button>
+  <div id="score"></div>
 </div>
 
 <script>
-const cards=[
-  {front:"🎬 Intro", back:"Dalam video kali ini, kita akan belajar tentang jenis-jenis skala dan jarak dalam peta.", color:"#e67e22"},
-  {front:"🧭 Pengenalan Skala", back:"Skala ialah nisbah antara jarak di peta dengan jarak sebenar di bumi.", color:"#27ae60"},
-  {front:"📏 Skala Nombor", back:"Contoh 1:50,000 → 1cm di peta = 500m di bumi.", color:"#27ae60"},
-  {front:"📖 Skala Perkataan", back:"Contoh: “1cm mewakili 1km”. Mudah difahami umum.", color:"#27ae60"},
-  {front:"📊 Skala Garisan", back:"Ditunjukkan sebagai garisan bersegmen, setiap segmen mewakili ukuran tertentu (cth: 1km).", color:"#27ae60"},
-  {front:"📐 Jarak Mutlak", back:"Jarak sebenar antara 2 lokasi. Ukur di peta guna pembaris & skala.", color:"#2980b9"},
-  {front:"🚶‍♂️ Jarak Relatif", back:"Jarak ikut masa, kos, atau pengangkutan. Contoh: bas vs jalan kaki.", color:"#2980b9"},
-  {front:"💡 Kepentingan", back:"Memahami skala & jarak → rancang perjalanan, faham lokasi & kawasan.", color:"#8e44ad"},
-  {front:"🎉 Penutup", back:"Semoga anda lebih faham tentang skala & jarak. Teruskan ulangkaji!", color:"#e67e22"}
+const questions = [
+  {
+    question: "1. Iklim monsun berlaku di kawasan manakah di Asia?",
+    options: ["A. Timur Tengah", "B. India dan Asia Tenggara", "C. Siberia", "D. Jepun"],
+    answer: 1
+  },
+  {
+    question: "2. Kawasan gurun di Asia mempunyai jenis iklim?",
+    options: ["A. Tropika basah", "B. Gurun / Arid", "C. Sederhana", "D. Kutub"],
+    answer: 1
+  },
+  {
+    question: "3. Iklim subtropika lembap banyak terdapat di?",
+    options: ["A. China Timur dan Jepun", "B. Mongolia", "C. Siberia Utara", "D. Arab Saudi"],
+    answer: 0
+  },
+  {
+    question: "4. Kawasan bersalji dan beriklim kutub di Asia berada di?",
+    options: ["A. Himalaya", "B. Siberia Utara", "C. India", "D. Vietnam"],
+    answer: 1
+  },
+  {
+    question: "5. Iklim tropika basah terdapat di kawasan?",
+    options: ["A. Malaysia, Indonesia", "B. Turki", "C. Kazakhstan", "D. Jepun"],
+    answer: 0
+  }
 ];
 
-let currentIndex=0;
-const cardFront=document.getElementById("card-front");
-const cardBack=document.getElementById("card-back");
-const cardInner=document.getElementById("card-inner");
-const cardEl=document.getElementById("card");
-const bgMusic=document.getElementById("bgMusic");
+let currentIndex = 0;
+let score = 0;
 
-function renderCard(animationIn){
-  const cardData=cards[currentIndex];
-  cardFront.textContent=cardData.front;
-  cardBack.textContent=cardData.back;
-  cardFront.style.background=cardData.color;
-  cardBack.style.background=cardData.color;
-  cardInner.classList.remove("flipped");
-  if(animationIn){
-    cardEl.style.transform="translateX("+ (animationIn==="right" ? "100px":"-100px") +")";
-    cardEl.style.opacity="0";
-    setTimeout(()=>{cardEl.style.transition="all 0.5s ease"; cardEl.style.transform="translateX(0)"; cardEl.style.opacity="1";},10);
-    setTimeout(()=>{cardEl.style.transition="";},510);
+function renderQuestion(){
+  const q = questions[currentIndex];
+  document.getElementById("question").textContent = q.question;
+  const optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+  document.getElementById("feedback").textContent = "";
+  document.getElementById("nextBtn").style.display = "none";
+
+  q.options.forEach((option, index)=>{
+    const btn = document.createElement("button");
+    btn.textContent = option;
+    btn.onclick = ()=>checkAnswer(index);
+    optionsDiv.appendChild(btn);
+  });
+  document.getElementById("score").textContent = `Skor: ${score}`;
+}
+
+function checkAnswer(selected){
+  const q = questions[currentIndex];
+  const feedback = document.getElementById("feedback");
+  if(selected === q.answer){
+    feedback.textContent = "Betul! ✅";
+    score++;
+  } else {
+    feedback.textContent = `Salah ❌. Jawapan betul: ${q.options[q.answer]}`;
+  }
+  document.getElementById("nextBtn").style.display = "block";
+  document.getElementById("score").textContent = `Skor: ${score}`;
+  // Disable semua option button
+  document.querySelectorAll(".options button").forEach(btn=>btn.disabled=true);
+}
+
+function nextQuestion(){
+  currentIndex++;
+  if(currentIndex < questions.length){
+    renderQuestion();
+  } else {
+    document.getElementById("game-container").innerHTML = `<h2>Permainan Tamat!</h2><p>Skor Akhir: ${score} / ${questions.length}</p>`;
   }
 }
 
-function flipCard(){ cardInner.classList.toggle("flipped"); }
-
-function nextCard(){
-  currentIndex=(currentIndex+1)%cards.length;
-  renderCard("right");
-}
-function prevCard(){
-  currentIndex=(currentIndex-1+cards.length)%cards.length;
-  renderCard("left");
-}
-
-function toggleMute(){ bgMusic.muted=!bgMusic.muted; }
-function playAudio(){ bgMusic.play(); }
-
-renderCard();
+renderQuestion();
 </script>
 
 </body>
