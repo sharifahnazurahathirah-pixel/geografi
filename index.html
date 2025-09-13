@@ -1,80 +1,138 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Flashcard: Skala dan Jarak</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flash Card Skala & Jarak</title>
   <style>
-    body {font-family: Inter, Arial, sans-serif; background: #f8fafc; margin: 0; padding: 20px;}
-    .container {max-width: 900px; margin: auto;}
-    h1 {text-align: center; margin-bottom: 20px;}
-    .flashcards {display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;}
-    .card {background: #fff; border-radius: 14px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); padding: 20px; cursor: pointer; perspective: 1000px;}
-    .card-inner {position: relative; width: 100%; height: 100%; transition: transform 0.7s; transform-style: preserve-3d;}
-    .card.flipped .card-inner {transform: rotateY(180deg);}
-    .card-front, .card-back {position: absolute; top:0; left:0; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 14px;}
-    .card-front {display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; color: #0f172a;}
-    .card-back {transform: rotateY(180deg); background: #f1f5f9; padding: 16px; overflow-y: auto; font-size: 0.95rem;}
-    footer {margin-top: 30px; text-align: center; color: #64748b; font-size: 0.9rem;}
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    .card {
+      width: 300px;
+      height: 200px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+    }
+
+    .card-front {
+      background: #ffffff;
+    }
+
+    .card-back {
+      color: white;
+      transform: rotateY(180deg);
+      font-size: 14px;
+    }
+
+    /* Warna kategori */
+    .intro { background: #f1c40f; }       /* kuning */
+    .skala { background: #27ae60; }       /* hijau */
+    .jarak { background: #2980b9; }       /* biru */
+    .kepentingan { background: #8e44ad; } /* ungu */
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Flashcard: Skala dan Jarak</h1>
-    <div class="flashcards">
-      <div class="card"><div class="card-inner">
-        <div class="card-front">Intro</div>
-        <div class="card-back">Dalam video kali ini, kita akan belajar tentang jenis-jenis skala dan jarak dalam peta. Jom fahami asas penting dalam membaca peta!</div>
-      </div></div>
 
-      <div class="card"><div class="card-inner">
-        <div class="card-front">🧭 Pengenalan Skala</div>
-        <div class="card-back">Skala ialah nisbah antara jarak di atas peta dengan jarak sebenar di permukaan bumi. Tanpa skala, kita tidak dapat menganggarkan jarak sebenar antara dua tempat dalam peta.</div>
-      </div></div>
-
-      <div class="card"><div class="card-inner">
-        <div class="card-front">📏 Skala Nombor</div>
-        <div class="card-back">Skala nombor ditulis sebagai 1:50,000. Bermaksud 1 unit di peta = 50,000 unit di bumi sebenar. Contoh: 1 cm = 500 m.</div>
-      </div></div>
-
-      <div class="card"><div class="card-inner">
-        <div class="card-front">📏 Skala Perkataan</div>
-        <div class="card-back">Skala perkataan ditulis dalam ayat, contoh: 1 cm mewakili 1 km. Mudah difahami dan sesuai untuk orang awam.</div>
-      </div></div>
-
-      <div class="card"><div class="card-inner">
-        <div class="card-front">📏 Skala Garisan</div>
-        <div class="card-back">Ditunjukkan dengan garisan bersegmen di bawah peta. Setiap segmen mewakili ukuran tertentu, contoh 1 km. Boleh diukur terus dengan pembaris.</div>
-      </div></div>
-
-      <div class="card"><div class="card-inner">
-        <div class="card-front">📐 Jarak Mutlak</div>
-        <div class="card-back">Jarak sebenar antara dua lokasi, diukur dalam km atau m. Boleh guna pembaris di atas peta, ditukar menggunakan skala.</div>
-      </div></div>
-
-      <div class="card"><div class="card-inner">
-        <div class="card-front">📐 Jarak Relatif</div>
-        <div class="card-back">Jarak berdasarkan masa, kos, atau pengangkutan. Contoh: jarak rumah ke sekolah sama, tapi masa berbeza ikut cara pergi.</div>
-      </div></div>
-
-      <div class="card"><div class="card-inner">
-        <div class="card-front">💡 Kepentingan Skala & Jarak</div>
-        <div class="card-back">Membantu mentafsir peta dengan tepat, merancang perjalanan, memahami lokasi, serta membuat keputusan geografi.</div>
-      </div></div>
-
-      <div class="card"><div class="card-inner">
-        <div class="card-front">🎉 Penutup</div>
-        <div class="card-back">Semoga lebih faham tentang skala dan jarak dalam peta. Kuasai asas ini untuk mahir Geografi Tingkatan 2!</div>
-      </div></div>
+  <!-- Intro -->
+  <div class="card" onclick="this.classList.toggle('flipped')">
+    <div class="card-inner">
+      <div class="card-front"><h3>🎬 Intro</h3></div>
+      <div class="card-back intro"><p>“Dalam video kali ini, kita akan belajar tentang jenis-jenis skala dan jarak dalam peta.”</p></div>
     </div>
-
-    <footer>Klik mana-mana kad untuk melihat isi di belakangnya.</footer>
   </div>
 
-  <script>
-    document.querySelectorAll('.card').forEach(card => {
-      card.addEventListener('click', () => card.classList.toggle('flipped'));
-    });
-  </script>
-</body>
-</html>
+  <!-- Pengenalan Skala -->
+  <div class="card" onclick="this.classList.toggle('flipped')">
+    <div class="card-inner">
+      <div class="card-front"><h3>🧭 Pengenalan Skala</h3></div>
+      <div class="card-back skala"><p>Skala ialah nisbah antara jarak di peta dengan jarak sebenar di bumi. Tanpa skala, kita tak boleh anggar jarak sebenar.</p></div>
+    </div>
+  </div>
+
+  <!-- Skala Nombor -->
+  <div class="card" onclick="this.classList.toggle('flipped')">
+    <div class="card-inner">
+      <div class="card-front"><h3>📏 Skala Nombor</h3></div>
+      <div class="card-back skala"><p>Ditulis dalam nisbah, contoh 1:50,000 → 1cm di peta = 500m di bumi.</p></div>
+    </div>
+  </div>
+
+  <!-- Skala Perkataan -->
+  <div class="card" onclick="this.classList.toggle('flipped')">
+    <div class="card-inner">
+      <div class="card-front"><h3>📖 Skala Perkataan</h3></div>
+      <div class="card-back skala"><p>Dinyatakan dalam ayat, contoh: “1cm mewakili 1km”. Mudah difahami umum.</p></div>
+    </div>
+  </div>
+
+  <!-- Skala Garisan -->
+  <div class="card" onclick="this.classList.toggle('flipped')">
+    <div class="card-inner">
+      <div class="card-front"><h3>📊 Skala Garisan</h3></div>
+      <div class="card-back skala"><p>Ditunjukkan sebagai garisan bersegmen, setiap segmen mewakili ukuran tertentu (cth: 1km).</p></div>
+    </div>
+  </div>
+
+  <!-- Jarak Mutlak -->
+  <div class="card" onclick="this.classList.toggle('flipped')">
+    <div class="card-inner">
+      <div class="card-front"><h3>📐 Jarak Mutlak</h3></div>
+      <div class="card-back jarak"><p>Jarak sebenar antara 2 lokasi, biasanya dalam km atau m. Ukur di peta guna pembaris & skala.</p></div>
+    </div>
+  </div>
+
+  <!-- Jarak Relatif -->
+  <div class="card" onclick="this.classList.toggle('flipped')">
+    <div class="card-inner">
+      <div class="card-front"><h3>🚶‍♂️ Jarak Relatif</h3></div>
+      <div class="card-back jarak"><p>Jarak ikut masa, kos, atau pengangkutan. Contoh: 2 pelajar jarak sama ke sekolah, tapi masa berbeza sebab cara bergerak berbeza.</p></div>
+    </div>
+  </div>
+
+  <!-- Kepentingan Skala & Jarak -->
+  <div class="card" onclick="this.classList.toggle('flipped')">
+    <div class="card-inner">
+      <div class="card-front"><h3>💡 Kepentingan</h3></div>
+      <div class="card-back kepentingan"><p>Memahami skala & jarak → mentafsir peta tepat, rancang perjalanan, faham lokasi & susun atur kawasan.</p></div>
+    </div>
+  </div>
+
+  <!-- Penutup -->
+  <div class="card" onclick="this.classList.toggle('flipped')">
+    <div class="card-inner">
+      <div class="card-front"><h3>🎉 Penutup</h3></div>
+      <div class="card-back intro"
