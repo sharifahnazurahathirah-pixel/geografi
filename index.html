@@ -1,252 +1,158 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flash Card Quiz</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #dfe9f3 0%, #ffffff 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      padding: 10px;
-      overflow-x: hidden;
-    }
-
-    /* Kad */
-    .card {
-      width: 90%;
-      max-width: 340px;
-      height: 240px;
-      perspective: 1000px;
-      margin-bottom: 60px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease;
-      position: relative;
-    }
-
-    .card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 16px 32px rgba(0,0,0,0.25);
-    }
-
-    .card-inner {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      text-align: center;
-      transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
-      transform-style: preserve-3d;
-    }
-
-    .flipped {
-      transform: rotateY(180deg);
-    }
-
-    .card-front, .card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 16px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 15px;
-      font-size: 16px;
-      line-height: 1.4;
-      transition: background 0.8s ease, color 0.8s ease;
-      word-wrap: break-word;
-    }
-
-    .card-front {
-      font-weight: bold;
-      color: #fff;
-    }
-
-    .card-back {
-      color: white;
-      transform: rotateY(180deg);
-    }
-
-    /* Animasi masuk/keluar */
-    .fade-out-left {
-      animation: fadeOutLeft 0.5s forwards;
-    }
-
-    .fade-out-right {
-      animation: fadeOutRight 0.5s forwards;
-    }
-
-    .fade-in-left {
-      animation: fadeInLeft 0.5s forwards;
-    }
-
-    .fade-in-right {
-      animation: fadeInRight 0.5s forwards;
-    }
-
-    @keyframes fadeOutLeft {
-      0% {opacity: 1; transform: translateX(0);}
-      100% {opacity: 0; transform: translateX(-100px);}
-    }
-
-    @keyframes fadeOutRight {
-      0% {opacity: 1; transform: translateX(0);}
-      100% {opacity: 0; transform: translateX(100px);}
-    }
-
-    @keyframes fadeInLeft {
-      0% {opacity: 0; transform: translateX(-100px);}
-      100% {opacity: 1; transform: translateX(0);}
-    }
-
-    @keyframes fadeInRight {
-      0% {opacity: 0; transform: translateX(100px);}
-      100% {opacity: 1; transform: translateX(0);}
-    }
-
-    /* Butang kawalan */
-    .controls {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    button {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 12px;
-      background: #2ecc71;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-      flex: 1 1 auto;
-      min-width: 80px;
-    }
-
-    button:hover {
-      background: #27ae60;
-      transform: scale(1.05);
-    }
-
-    /* Butang mute/unmute */
-    #muteBtn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #e67e22;
-    }
-
-    /* Responsif text */
-    @media (max-width: 400px) {
-      .card-front, .card-back {
-        font-size: 14px;
-      }
-
-      button {
-        padding: 10px 16px;
-        font-size: 14px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flash Card Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #dfe9f3 0%, #ffffff 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  padding: 10px;
+}
+.card {
+  width: 90%;
+  max-width: 340px;
+  height: 240px;
+  perspective: 1000px;
+  margin-bottom: 60px;
+  position: relative;
+}
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  text-align: center;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.flipped { transform: rotateY(180deg); }
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  font-size: 16px;
+  line-height: 1.4;
+  transition: background 0.5s ease, color 0.5s ease, transform 0.5s ease, opacity 0.5s ease;
+  word-wrap: break-word;
+}
+.card-front { font-weight: bold; color: #fff; }
+.card-back { color: #fff; transform: rotateY(180deg); }
+.controls {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  background: #2ecc71;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  flex: 1 1 auto;
+  min-width: 80px;
+}
+button:hover { background: #27ae60; transform: scale(1.05);}
+#muteBtn { position: absolute; top: 10px; right: 10px; background: #e67e22;}
+#playAudioBtn { position: absolute; top: 50px; right: 10px; background: #3498db;}
+@media(max-width:400px){
+  .card-front,.card-back{ font-size:14px;}
+  button{ padding:10px 16px; font-size:14px;}
+}
+</style>
 </head>
 <body>
 
-  <!-- Muzik latar -->
-  <audio id="bgMusic" autoplay loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-creativeminds.mp3" type="audio/mpeg">
-    Browser anda tidak menyokong audio.
-  </audio>
+<audio id="bgMusic" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-creativeminds.mp3" type="audio/mpeg">
+  Browser anda tidak menyokong audio.
+</audio>
+<button id="muteBtn" onclick="toggleMute()">🔊</button>
+<button id="playAudioBtn" onclick="playAudio()">▶️ Main Audio</button>
 
-  <!-- Butang mute/unmute -->
-  <button id="muteBtn" onclick="toggleMute()">🔊</button>
-
-  <!-- Kad -->
-  <div class="card" id="card">
-    <div class="card-inner" id="card-inner">
-      <div class="card-front" id="card-front"></div>
-      <div class="card-back" id="card-back"></div>
-    </div>
+<div class="card" id="card">
+  <div class="card-inner" id="card-inner">
+    <div class="card-front" id="card-front"></div>
+    <div class="card-back" id="card-back"></div>
   </div>
+</div>
 
-  <!-- Butang kawalan -->
-  <div class="controls">
-    <button onclick="prevCard()">⬅️ Sebelumnya</button>
-    <button onclick="flipCard()">🔄 Flip</button>
-    <button onclick="nextCard()">➡️ Seterusnya</button>
-  </div>
+<div class="controls">
+  <button onclick="prevCard()">⬅️ Sebelumnya</button>
+  <button onclick="flipCard()">🔄 Flip</button>
+  <button onclick="nextCard()">➡️ Seterusnya</button>
+</div>
 
-  <script>
-    const cards = [
-      {front: "🎬 Intro", back: "Dalam video kali ini, kita akan belajar tentang jenis-jenis skala dan jarak dalam peta.", color: "#e67e22"},
-      {front: "🧭 Pengenalan Skala", back: "Skala ialah nisbah antara jarak di peta dengan jarak sebenar di bumi.", color: "#27ae60"},
-      {front: "📏 Skala Nombor", back: "Contoh 1:50,000 → 1cm di peta = 500m di bumi.", color: "#27ae60"},
-      {front: "📖 Skala Perkataan", back: "Contoh: “1cm mewakili 1km”. Mudah difahami umum.", color: "#27ae60"},
-      {front: "📊 Skala Garisan", back: "Ditunjukkan sebagai garisan bersegmen, setiap segmen mewakili ukuran tertentu (cth: 1km).", color: "#27ae60"},
-      {front: "📐 Jarak Mutlak", back: "Jarak sebenar antara 2 lokasi. Ukur di peta guna pembaris & skala.", color: "#2980b9"},
-      {front: "🚶‍♂️ Jarak Relatif", back: "Jarak ikut masa, kos, atau pengangkutan. Contoh: bas vs jalan kaki.", color: "#2980b9"},
-      {front: "💡 Kepentingan", back: "Memahami skala & jarak → rancang perjalanan, faham lokasi & kawasan.", color: "#8e44ad"},
-      {front: "🎉 Penutup", back: "Semoga anda lebih faham tentang skala & jarak. Teruskan ulangkaji!", color: "#e67e22"}
-    ];
+<script>
+const cards=[
+  {front:"🎬 Intro", back:"Dalam video kali ini, kita akan belajar tentang jenis-jenis skala dan jarak dalam peta.", color:"#e67e22"},
+  {front:"🧭 Pengenalan Skala", back:"Skala ialah nisbah antara jarak di peta dengan jarak sebenar di bumi.", color:"#27ae60"},
+  {front:"📏 Skala Nombor", back:"Contoh 1:50,000 → 1cm di peta = 500m di bumi.", color:"#27ae60"},
+  {front:"📖 Skala Perkataan", back:"Contoh: “1cm mewakili 1km”. Mudah difahami umum.", color:"#27ae60"},
+  {front:"📊 Skala Garisan", back:"Ditunjukkan sebagai garisan bersegmen, setiap segmen mewakili ukuran tertentu (cth: 1km).", color:"#27ae60"},
+  {front:"📐 Jarak Mutlak", back:"Jarak sebenar antara 2 lokasi. Ukur di peta guna pembaris & skala.", color:"#2980b9"},
+  {front:"🚶‍♂️ Jarak Relatif", back:"Jarak ikut masa, kos, atau pengangkutan. Contoh: bas vs jalan kaki.", color:"#2980b9"},
+  {front:"💡 Kepentingan", back:"Memahami skala & jarak → rancang perjalanan, faham lokasi & kawasan.", color:"#8e44ad"},
+  {front:"🎉 Penutup", back:"Semoga anda lebih faham tentang skala & jarak. Teruskan ulangkaji!", color:"#e67e22"}
+];
 
-    let currentIndex = 0;
-    const card = document.getElementById("card");
-    const cardFront = document.getElementById("card-front");
-    const cardBack = document.getElementById("card-back");
-    const cardInner = document.getElementById("card-inner");
-    const bgMusic = document.getElementById("bgMusic");
-    const muteBtn = document.getElementById("muteBtn");
+let currentIndex=0;
+const cardFront=document.getElementById("card-front");
+const cardBack=document.getElementById("card-back");
+const cardInner=document.getElementById("card-inner");
+const cardEl=document.getElementById("card");
+const bgMusic=document.getElementById("bgMusic");
 
-    function renderCard(animationIn) {
-      const cardData = cards[currentIndex];
-      cardFront.textContent = cardData.front;
-      cardBack.textContent = cardData.back;
-      cardFront.style.background = cardData.color;
-      cardBack.style.background = cardData.color;
-      cardInner.classList.remove("flipped");
+function renderCard(animationIn){
+  const cardData=cards[currentIndex];
+  cardFront.textContent=cardData.front;
+  cardBack.textContent=cardData.back;
+  cardFront.style.background=cardData.color;
+  cardBack.style.background=cardData.color;
+  cardInner.classList.remove("flipped");
+  if(animationIn){
+    cardEl.style.transform="translateX("+ (animationIn==="right" ? "100px":"-100px") +")";
+    cardEl.style.opacity="0";
+    setTimeout(()=>{cardEl.style.transition="all 0.5s ease"; cardEl.style.transform="translateX(0)"; cardEl.style.opacity="1";},10);
+    setTimeout(()=>{cardEl.style.transition="";},510);
+  }
+}
 
-      if(animationIn) {
-        card.classList.add(animationIn);
-        setTimeout(() => { card.classList.remove(animationIn); }, 500);
-      }
-    }
+function flipCard(){ cardInner.classList.toggle("flipped"); }
 
-    function flipCard() {
-      cardInner.classList.toggle("flipped");
-    }
+function nextCard(){
+  currentIndex=(currentIndex+1)%cards.length;
+  renderCard("right");
+}
+function prevCard(){
+  currentIndex=(currentIndex-1+cards.length)%cards.length;
+  renderCard("left");
+}
 
-    function nextCard() {
-      card.classList.add("fade-out-left");
-      setTimeout(() => {
-        currentIndex = (currentIndex + 1) % cards.length;
-        renderCard("fade-in-right");
-      }, 500);
-    }
+function toggleMute(){ bgMusic.muted=!bgMusic.muted; }
+function playAudio(){ bgMusic.play(); }
 
-    function prevCard() {
-      card.classList.add("fade-out-right");
-      setTimeout(() => {
-        currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-        renderCard("fade-in-left");
-      }, 500);
-    }
+renderCard();
+</script>
 
-    function toggleMute() {
-      bgMusic.muted = !bgMusic.muted;
-      muteBtn.textContent = bgMusic.muted ? "🔇" : "🔊";
-    }
-
-    renderCard();
-  </script>
 </body>
 </html>
