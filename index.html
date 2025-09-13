@@ -3,35 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flash Card Skala & Jarak</title>
+  <title>Flash Card Quiz</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f0f4f8;
+      background: linear-gradient(135deg, #dfe9f3 0%, #ffffff 100%);
       display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      padding: 30px;
+      height: 100vh;
+      margin: 0;
     }
 
     .card {
-      width: 300px;
-      height: 200px;
+      width: 320px;
+      height: 220px;
       perspective: 1000px;
-      cursor: pointer;
+      margin-bottom: 20px;
     }
 
     .card-inner {
-      position: relative;
       width: 100%;
       height: 100%;
+      position: relative;
       text-align: center;
-      transition: transform 0.6s;
+      transition: transform 0.8s;
       transform-style: preserve-3d;
     }
 
-    .card.flipped .card-inner {
+    .flipped {
       transform: rotateY(180deg);
     }
 
@@ -40,100 +41,111 @@
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 15px;
+      font-size: 16px;
+      line-height: 1.4;
     }
 
     .card-front {
       background: #ffffff;
+      font-weight: bold;
     }
 
     .card-back {
+      background: #3498db;
       color: white;
       transform: rotateY(180deg);
-      font-size: 14px;
     }
 
-    /* Warna kategori */
-    .intro { background: #f1c40f; }       /* kuning */
-    .skala { background: #27ae60; }       /* hijau */
-    .jarak { background: #2980b9; }       /* biru */
-    .kepentingan { background: #8e44ad; } /* ungu */
+    .controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      background: #2ecc71;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #27ae60;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Intro -->
-  <div class="card" onclick="this.classList.toggle('flipped')">
-    <div class="card-inner">
-      <div class="card-front"><h3>🎬 Intro</h3></div>
-      <div class="card-back intro"><p>“Dalam pembelajaran kali ini, kita akan belajar tentang jenis-jenis skala dan jarak dalam peta.”</p></div>
+  <!-- Muzik -->
+  <audio autoplay loop controls>
+    <source src="music.mp3" type="audio/mpeg">
+    Browser anda tidak menyokong audio.
+  </audio>
+
+  <!-- Kad -->
+  <div class="card" onclick="flipCard()">
+    <div class="card-inner" id="card-inner">
+      <div class="card-front" id="card-front"></div>
+      <div class="card-back" id="card-back"></div>
     </div>
   </div>
 
-  <!-- Pengenalan Skala -->
-  <div class="card" onclick="this.classList.toggle('flipped')">
-    <div class="card-inner">
-      <div class="card-front"><h3>🧭 Pengenalan Skala</h3></div>
-      <div class="card-back skala"><p>Skala ialah nisbah antara jarak di peta dengan jarak sebenar di bumi. Tanpa skala, kita tak boleh anggar jarak sebenar.</p></div>
-    </div>
+  <!-- Butang kawalan -->
+  <div class="controls">
+    <button onclick="prevCard()">⬅️ Sebelumnya</button>
+    <button onclick="flipCard()">🔄 Flip</button>
+    <button onclick="nextCard()">➡️ Seterusnya</button>
   </div>
 
-  <!-- Skala Nombor -->
-  <div class="card" onclick="this.classList.toggle('flipped')">
-    <div class="card-inner">
-      <div class="card-front"><h3>📏 Skala Nombor</h3></div>
-      <div class="card-back skala"><p>Ditulis dalam nisbah, contoh 1:50,000 → 1cm di peta = 500m di bumi.</p></div>
-    </div>
-  </div>
+  <script>
+    const cards = [
+      {front: "🎬 Intro", back: "Dalam video kali ini, kita akan belajar tentang jenis-jenis skala dan jarak dalam peta."},
+      {front: "🧭 Pengenalan Skala", back: "Skala ialah nisbah antara jarak di peta dengan jarak sebenar di bumi."},
+      {front: "📏 Skala Nombor", back: "Contoh 1:50,000 → 1cm di peta = 500m di bumi."},
+      {front: "📖 Skala Perkataan", back: "Contoh: “1cm mewakili 1km”. Mudah difahami umum."},
+      {front: "📊 Skala Garisan", back: "Ditunjukkan sebagai garisan bersegmen, setiap segmen mewakili ukuran tertentu (cth: 1km)."},
+      {front: "📐 Jarak Mutlak", back: "Jarak sebenar antara 2 lokasi. Ukur di peta guna pembaris & skala."},
+      {front: "🚶‍♂️ Jarak Relatif", back: "Jarak ikut masa, kos, atau pengangkutan. Contoh: bas vs jalan kaki."},
+      {front: "💡 Kepentingan", back: "Memahami skala & jarak → rancang perjalanan, faham lokasi & kawasan."},
+      {front: "🎉 Penutup", back: "Semoga anda lebih faham tentang skala & jarak. Teruskan ulangkaji!"}
+    ];
 
-  <!-- Skala Perkataan -->
-  <div class="card" onclick="this.classList.toggle('flipped')">
-    <div class="card-inner">
-      <div class="card-front"><h3>📖 Skala Perkataan</h3></div>
-      <div class="card-back skala"><p>Dinyatakan dalam ayat, contoh: “1cm mewakili 1km”. Mudah difahami umum.</p></div>
-    </div>
-  </div>
+    let currentIndex = 0;
+    const cardFront = document.getElementById("card-front");
+    const cardBack = document.getElementById("card-back");
+    const cardInner = document.getElementById("card-inner");
 
-  <!-- Skala Garisan -->
-  <div class="card" onclick="this.classList.toggle('flipped')">
-    <div class="card-inner">
-      <div class="card-front"><h3>📊 Skala Garisan</h3></div>
-      <div class="card-back skala"><p>Ditunjukkan sebagai garisan bersegmen, setiap segmen mewakili ukuran tertentu (cth: 1km).</p></div>
-    </div>
-  </div>
+    function renderCard() {
+      cardFront.textContent = cards[currentIndex].front;
+      cardBack.textContent = cards[currentIndex].back;
+      cardInner.classList.remove("flipped"); // reset ke depan
+    }
 
-  <!-- Jarak Mutlak -->
-  <div class="card" onclick="this.classList.toggle('flipped')">
-    <div class="card-inner">
-      <div class="card-front"><h3>📐 Jarak Mutlak</h3></div>
-      <div class="card-back jarak"><p>Jarak sebenar antara 2 lokasi, biasanya dalam km atau m. Ukur di peta guna pembaris & skala.</p></div>
-    </div>
-  </div>
+    function flipCard() {
+      cardInner.classList.toggle("flipped");
+    }
 
-  <!-- Jarak Relatif -->
-  <div class="card" onclick="this.classList.toggle('flipped')">
-    <div class="card-inner">
-      <div class="card-front"><h3>🚶‍♂️ Jarak Relatif</h3></div>
-      <div class="card-back jarak"><p>Jarak ikut masa, kos, atau pengangkutan. Contoh: 2 pelajar jarak sama ke sekolah, tapi masa berbeza sebab cara bergerak berbeza.</p></div>
-    </div>
-  </div>
+    function nextCard() {
+      currentIndex = (currentIndex + 1) % cards.length;
+      renderCard();
+    }
 
-  <!-- Kepentingan Skala & Jarak -->
-  <div class="card" onclick="this.classList.toggle('flipped')">
-    <div class="card-inner">
-      <div class="card-front"><h3>💡 Kepentingan</h3></div>
-      <div class="card-back kepentingan"><p>Memahami skala & jarak → mentafsir peta tepat, rancang perjalanan, faham lokasi & susun atur kawasan.</p></div>
-    </div>
-  </div>
+    function prevCard() {
+      currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+      renderCard();
+    }
 
-  <!-- Penutup -->
-  <div class="card" onclick="this.classList.toggle('flipped')">
-    <div class="card-inner">
-      <div class="card-front"><h3>🎉 Penutup</h3></div>
-      <div class="card-back intro"
-
+    // mula dengan kad pertama
+    renderCard();
+  </script>
+</body>
+</html>
